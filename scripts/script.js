@@ -7,10 +7,19 @@ export class Book {
     this.title = title;
     this.pages = pages;
     this.read = read;
-    this.image = image || 'https://via.placeholder.com/150';
+
+    this.image = this.resolveImage(image);
   }
 
-  // Prototype method to toggle read status
+  resolveImage(image) {
+    if(image && image.trim() !== "") {
+      return image.trim();
+    }
+
+    // fallback placeholder with title
+    return `https://via.placeholder.com/250x350?text=${encodeURIComponent(this.title)}`;
+  }
+
   toggleRead() {
     this.read = !this.read;
   }

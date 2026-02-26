@@ -1,14 +1,22 @@
 // scripts/index.js
-import { myLibrary, addBookToLibrary, removeBookFromLibrary } from './script.js';
+// DOM manipulation and app logic
+import { Library, Book } from './script.js';
 
+// Create library instance
+const library = new Library();
 const displayBooksContainer = document.querySelector('.displaybooks');
 const newBookBtn = document.querySelector('.newBook button');
 
-// Create modal form using <dialog>
+// ---------- CREATE MODAL FORM ----------
 const dialog = document.createElement('dialog');
 dialog.innerHTML = `
   <form method="dialog" class="book-form">
     <h3>Add New Book</h3>
+
+    <label>
+        Cover Image URL
+        <input type="text" name="image" placeholder="https://example.com/image.jpg" />
+    </label>
 
     <label>
       Title
@@ -38,44 +46,44 @@ dialog.innerHTML = `
 `;
 document.body.appendChild(dialog);
 
-// Show form
-newBookBtn.addEventListener('click', () => {
-  dialog.showModal();
-});
+// Show modal
+newBookBtn.addEventListener('click', () => dialog.showModal());
 
-// Handle form submit
-dialog.querySelector('form').addEventListener('submit', (e) => {
-  e.preventDefault(); // IMPORTANT
-
-  const form = e.target;
-  const title = form.title.value;
-  const author = form.author.value;
-  const pages = form.pages.value;
-  const read = form.read.checked;
-
-  addBookToLibrary(author, title, pages, read);
-  displayBooks();
-
-  form.reset();
-  dialog.close();
-});
-
+// Close modal
 const cancelBtn = dialog.querySelector('#cancelBtn');
+cancelBtn.addEventListener('click', () => dialog.close());
 
-cancelBtn.addEventListener('click', () => {
+// ---------- FORM SUBMIT ----------
+dialog.querySelector('form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const form = e.target;
+
+  const title = form.title.value.trim();
+  const author = form.author.value.trim();
+  const pages = Number(form.pages.value);
+  const read = form.read.checked;
+  const image = form.image.value; //optional
+
+  const newBook = new Book(author, title, pages, read, image);
+
+  library.addBook(newBook);
+  displayBooks();
+  form.reset();
+
   dialog.close();
 });
 
-// Display books
+// ---------- DISPLAY BOOKS ----------
 function displayBooks() {
-  displayBooksContainer.innerHTML = '';
+  displayBooksContainer.innerHTML = "";
 
-  myLibrary.forEach((book) => {
-    const card = document.createElement('div');
-    card.classList.add('book-card');
+  library.getBooks().forEach((book) => {
+    const card = document.createElement("div");
+    card.classList.add("book-card");
     card.dataset.id = book.id;
 
     card.innerHTML = `
+      <img src="${book.image}" alt="${book.title}" class="book-cover" />
       <h3>${book.title}</h3>
       <p><strong>Author:</strong> ${book.author}</p>
       <p><strong>Pages:</strong> ${book.pages}</p>
@@ -85,7 +93,7 @@ function displayBooks() {
       <button class="remove-book">Remove</button>
     `;
 
-    // Toggle read
+    // Toggle read status
     card.querySelector('.toggle-read').addEventListener('click', () => {
       book.toggleRead();
       displayBooks();
@@ -93,7 +101,7 @@ function displayBooks() {
 
     // Remove book
     card.querySelector('.remove-book').addEventListener('click', () => {
-      removeBookFromLibrary(book.id);
+      library.removeBook(book.id);
       displayBooks();
     });
 
@@ -101,15 +109,17 @@ function displayBooks() {
   });
 }
 
-// backdrop clicks
+// Close modal when clicking outside the form
 dialog.addEventListener('click', (e) => {
-  // if click is outside the form
-  if (e.target === dialog) {
-    dialog.close();
-  }
+  if (e.target === dialog) dialog.close();
 });
 
-// Add sample books for testing
-addBookToLibrary('George Orwell', '1984', 328, true);
-addBookToLibrary('J.K. Rowling', 'Harry Potter', 450, false);
+// ---------- SAMPLE BOOKS ----------
+library.addBook(new Book('George Orwell', '1984', 328, true, ''));
+library.addBook(new Book('J.K. Rowling', 'Harry Potter', 450, false, ''));
+
+// Initial render
 displayBooks();
+
+// Optional: expose function for debugging in console
+window.displayBooks = displayBooks;
