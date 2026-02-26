@@ -1,32 +1,37 @@
 // scripts/script.js
+//this file contains js for logic flow
+export class Book {
+  constructor(author, title, pages, read, image) {
+    this.id = crypto.randomUUID(); // unique & stable id
+    this.author = author;
+    this.title = title;
+    this.pages = pages;
+    this.read = read;
+    this.image = image || 'https://via.placeholder.com/150';
+  }
 
-export const myLibrary = [];
-
-// Book constructor
-export function Book(author, title, pages, read) {
-  this.id = crypto.randomUUID(); // unique & stable id
-  this.author = author;
-  this.title = title;
-  this.pages = pages;
-  this.read = read;
+  // Prototype method to toggle read status
+  toggleRead() {
+    this.read = !this.read;
+  }
 }
 
-// Prototype method to toggle read status
-Book.prototype.toggleRead = function () {
-  this.read = !this.read;
-};
+export class Library {
+  #books = [];
 
-// Add book to library
-export function addBookToLibrary(author, title, pages, read) {
-  const newBook = new Book(author, title, pages, read);
-  myLibrary.push(newBook);
-  return newBook;
-}
+  addBook(book) {
+    this.getBooks.push(book);
+  }
 
-// Remove book by ID
-export function removeBookFromLibrary(id) {
-  const index = myLibrary.findIndex((book) => book.id === id);
-  if (index !== -1) {
-    myLibrary.splice(index, 1);
+  removeBook(id) {
+    this.#books = this.#books.filter((book) => book.id !== id);
+  }
+
+  getBooks() {
+    return this.#books;
+  }
+
+  getBookById(id) {
+    return this.#books.find((book) => book.id === id);
   }
 }
