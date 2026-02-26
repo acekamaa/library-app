@@ -20,7 +20,7 @@ export class Library {
   #books = [];
 
   addBook(book) {
-    this.getBooks.push(book);
+    this.#books.push(book);
   }
 
   removeBook(id) {
