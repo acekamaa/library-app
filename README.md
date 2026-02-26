@@ -30,14 +30,13 @@ Library-app/
 
 # How it works
 
-- All book data is stored in an in-memory array (`myLibrary`)
-- Each book is created using a `Book` constructor
-- A unique and stable ID is assigned to each book using `crypto.randomUUID()`
-- UI rendering is handled by a single `displayBooks()` function that rebuilds the UI based on the current state of the data
-- DOM elements are linked to book objects using `data-id` attributes
-- User actions (add, remove, toggle read status) update the data first, then re-render the UI
+- Uses ES6 Classes (Book, Library) to model application data and encapsulate state.
+- Each book generates a unique ID and supports optional image URLs with an automatic placeholder fallback.
+- Form submission dynamically creates new Book instances and updates the library state.
+- displayBooks() re-renders the UI based on the current state (state-driven rendering pattern).
+- DOM elements are generated dynamically using template literals.
 
-This data-driven approach ensures the UI always reflects the current application state.
+Demonstrates object-oriented design, encapsulation, and dynamic UI updates without frameworks.
 
 # Getting started
 
