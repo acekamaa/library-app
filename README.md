@@ -59,7 +59,6 @@ https://gihub.com/acedev/library-app.git
 => for the Front end
 
 - add read button and the actual books for the library app to get to MVP-ready
-- add the books thumbnails on the cards for familiarity and trigger interest to users
 - add download button where users can actually make the files ready to read-offline
 - add user authentication and verification
 - add user profiles
