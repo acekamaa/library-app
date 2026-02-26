@@ -115,8 +115,8 @@ dialog.addEventListener('click', (e) => {
 });
 
 // ---------- SAMPLE BOOKS ----------
-library.addBook(new Book('George Orwell', '1984', 328, true, ''));
-library.addBook(new Book('J.K. Rowling', 'Harry Potter', 450, false, ''));
+library.addBook(new Book('George Orwell', '1984', 328, true, "../images/1984.jpeg"));
+library.addBook(new Book('J.K. Rowling', 'Harry Potter', 450, false, "../images/harrypotter.jpeg"));
 
 // Initial render
 displayBooks();
